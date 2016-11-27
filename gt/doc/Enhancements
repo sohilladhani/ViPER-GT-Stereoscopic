@@ -1,0 +1,147 @@
+		 ************************************
+			     ENHANCEMENTS
+		 ************************************
+
+This is a list of necessary enhancements/BUGS that appear yet in ViPER2.0
+
+In order of PRIORITY:
+
+- add debug mode, can be turn on by -D in the command line of viper3.2.
+
+- fix imcompatible pointer usage
+
+- fix parser reqire no space bug
+
+- fix viper3.1 FILE attributes missing quotes bug.
+
+- fix point mode selection bug
+
+- fix content table NULL pointer bug
+
+- fix properties directory bug
+
+- tune up for memory usage
+
+- extra "static" gets written in with default
+	FIXED - NEED TO TEST
+
+- default not working in ViPER
+
+-  Propagate a given attribute
+
+-  "quotes" required for text fields - may need a converstion tool too
+	Question: Can the data be split across multiple lines?  For
+	example in an svalue.  I think so, but please verify.
+
+- need a utility to merge two .gtf, or .rdf files based on object numbers.
+
+- new distance measure - mindiv
+
+
+
+
+- Add more robust file handling (warning for duplicates)
+
+- Add Reset (Clears everything)
+
+- Ability to read both config and image files from the file menues
+
+- Allow propagate of selected cells.
+
+- Polygon datatype.
+
+- Add propogate "thumbs" (Ali)
+
+		 ************************************
+				 BUGS
+		 ************************************
+- Exceptions when moving around slider.....
+
+Exception occurred during event dispatching:
+java.lang.NullPointerException
+        at com.sun.java.swing.plaf.motif.MotifComboBoxUI.addKeyAccelerators(MotifComboBoxUI.java:296)
+        at com.sun.java.swing.plaf.basic.BasicComboBoxUI$1.run(BasicComboBoxUI.java:155)
+        at com.sun.java.swing.SystemEventQueueUtilities.processRunnableEvent(SystemEventQueueUtilities.java:193)
+        at com.sun.java.swing.SystemEventQueueUtilities.access$0(SystemEventQueueUtilities.java:189)
+        at com.sun.java.swing.SystemEventQueueUtilities$RunnableTarget.processEvent(SystemEventQueueUtilities.java:230)
+        at java.awt.Component.dispatchEventImpl(Component.java:1781)
+        at java.awt.Component.dispatchEvent(Component.java:1708)
+        at java.awt.EventDispatchThread.run(EventDispatchThread.java:81)
+
+Menus disappear over root image
+
+
+
+		 ************************************
+		       CLOSED BUGS/ENHANCEMENTS
+		 ************************************
+
+- Problem with writing the consecutive image files, and tieing rangle
+	to propagate slider. Perhaps have a new pulldown for dump-all vs
+	dump-range. 
+
+- Keep selected objects highlight as frames change.
+
+
+- Tie save to save in main menu
+	pops up interface, writes #include "whatever.cfg" then all of the data
+
+
+- Need propogate button on bottom of left panel which propogates over
+a given range
+
+- Propogate propogates both valid and invalid rows.  If the row is
+invalid, it just propogates invalid.  If it is valid, it propogate valid + all of the information.
+
+- Fix ABOUT: currently it does nothing
+ 
+
+- When we select an object from the table that is not visable, can we
+indicate that somehow raising the table? DONE
+
+
+
+- Tie in "Show Records" (currently record view under utilities) which
+essentially pops up the "saved data" in window PRIORITY
+
+- Add in "Show Configuration (pops up config dump).  You already have
+the text from the dump at the beginning, dump it to a window just like
+before  PRIORITY
+
+- Toggleing valid should draw/erase data for spatial attributes - BUT
+DATA SHOULE STAY
+
+- Add pop-up "File" table so we can edit file information - SHOULD WRITE DATA
+
+
+- Add Dump Image and Dump Images.  Loops through all images and dumps ppms to a "DIRECTORY" created with a file dialog
+
+- Do Something better with debug statements
+
+
+- Make propogate more robust...  Ie Write out what is being propogated? or 
+an error saying nothing propogated.
+
+- Allow groups of shapes to be moved together.
+
+- Tie in Load DATA
+
+- Change title on ID to "OBJ ID"
+
+- Problems with meta keys and string interaction - Make them all ctrl-keys
+
+
+
+- Add Circles
+
+
+- Restricting drawing of bboxes
+
+- Fixing Static bug
+
+- Solving menu draw bug
+
+- Print content out as one big group
+
+- Solving null pointer bug. (DONE BY FELIX!)
+

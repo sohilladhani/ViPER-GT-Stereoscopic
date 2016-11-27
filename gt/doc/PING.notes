@@ -1,0 +1,9 @@
+-------------------------------
+Newly modification to ViPER
+-------------------------------
+
+* Object table has 2 modes, showing all objects or only objects of current
+  frame.
+* All class files are put into classes directory, and viper runs from
+  classes dir instead of src.
+

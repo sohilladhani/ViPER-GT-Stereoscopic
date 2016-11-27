@@ -1,0 +1,34 @@
+BUGS for ViPER 3.0
+
+ - (clin) 1999-08-24
+    Produces a ClassCastException error when mouse click over an entry
+   containing a Circle.   This error appears in ImageFrame.java
+
+ - (clin) 1999-08-24
+    bin/RunIt AllTypesLarge.gtf cricket4 seems to cause memory problems.
+
+ - (davidm) 1999-08-18
+   Need to upgrade to new file format (using "s around data)
+
+ - (davidm) 1999-08-18 (see 1999-08-24 Fixed Bugs)
+  "default" data not working properly. Fixing this has led to more
+   problems with tables.
+
+ - (davidm) 1999-08-18
+   Still using a lot of Beta Swing code. 
+
+Please email all bugs to viper-bugs@cfar.umd.edu
+
+
+Fixed Bugs
+
+1999-08-24
+  
+  - Defaults currently work, but tables need to be fixed because of
+    other changes made (primarily, all datatypes are now derived
+    from m_Datatype, and that new classes Snapshot and SnapshotList
+    have been added). (clin)
+
+1999-08-18
+
+ - Fixed extra [static] occuring in lvalue data.

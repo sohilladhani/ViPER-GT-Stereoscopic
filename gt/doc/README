@@ -1,0 +1,145 @@
+ * ************************************************************************ *
+       Copyright (C) 2000 by the University of Maryland, College Park
+
+		Laboratory for Language and Media Processing
+		   Institute for Advanced Computer Studies
+	       University of Maryland, College Park, MD  20742
+
+   email: lamp@cfar.umd.edu               http: lamp.cfar.umd.edu
+ * ************************************************************************ *
+
+This version of the software has the basic functionality to read, edit
+and save data and configuration files.  Many of the scripts will need
+to be modified to be site specific.
+
+The default configuration/groundtruth path is <VIPERHOME>/GTF, the
+default series path is <VIPERHOME>/DATA and the default src path is
+<VIPERHOME>/src.
+
+************************************************************************
+Settting up a series:
+
+	FOR 3.1 YOU DO NOT NEED TO HAVE A SERIES OF FILES, but of
+            course you can still have one! (see RELEASE_NOTES)
+
+	New Info File Format: (old format still works-assumes JPEGS)
+		#VIPER_VERSION_3.0
+		N     [0 = JPEGs, 1 = List of Files, 2 = MPEG file]
+		Frame_Range [e.g 1 100,  iff N = 0]
+		List of Filenames [iff N = 1]
+
+	So you can choose from an ordered list of JPEGS, an unordered
+list of files and a single MPEG file.  Of course you can always split
+the file!
+
+	To set up a series, a utility is provided in the bin directory
+called mpeg2series which converts an mpeg file to series of jpg files
+for VIPER it use.  
+
+It requires:
+	mpeg_play to convert to a series of ppm files and
+	convert (part of imagemagick) to convert ppms to jpgs
+	mpeg_encode to create movies
+
+To use mpeg2series, copy an mpeg file to the location you want to
+create the series.  A subdirectory will be created to hold the data,
+so for example you can begin in the "data" direcotry.
+
+	cd <VIPERHOME>/DATA
+	cp <PATH_to_MPEG>/mympegfile.mpg .
+
+Then move to the location of the mpeg file and run:
+	mpeg2series mympegfile
+
+Note there is not extension required (.mpg is assumed) A directory
+"mympegfile" will be created, a copy of the mpeg file will be made in
+that directory, and the conversion will occur.  The final results will
+be a .info file and a series of .jpg files to be used by VIPER
+	
+************************************************************************
+Running ViPER
+
+
+ViPER is currently started from the commandline.  To run Viper, you
+should create a series as a subdirectory of the data directory as
+described above, and define a config file in the config directory.
+
+ViPER is started from the <VIPERHOME> directory by typing
+
+	source ViPER33.config
+	viper3.3 <GTFFILE> <SERIESDIR>
+
+Again, the default configuration path is <VIPERHOME>/GTF, the
+default series path is <VIPERHOME>/data and the default src path is
+<VIPERHOME>/src.
+
+There is a file in the src directory called ViPER_GUI.properties which
+defines some default values for the system. Users should understand
+these parameters, but they should not have to be changed.
+
+The RunIt script may need to be changed to suite local configurations
+
+************************************************************************
+
+Only limited functionality is present in the interface.  Changes can
+be made and saved.  
+
+Here are some notes:
+ 
+* Files are saved to the config directory.
+
+* Attributes can not be edited unless the valid (V) box is check.
+
+* Attributes will not be propogated unless the propogate (P) box is checked.
+
+* Attributes with a (*) in the name are static, so changing a single
+  frame will change the attribute for the entire object.
+ 
+* Data can not currently be loaded from the menus
+
+* To edit a rectangle, you must click within 3 pixels of either a side 
+	or corner to grab and move that side or corner.
+
+* To move a rectangle, you can click and drag
+
+* Only rectangles work right now...
+
+************************************************************************
+EXAMPLE
+
+cd to <VIPERHOME>
+
+#
+# Note: lamp-partial.cfg is in the config directory and LAMP is in the 
+#	data directory
+#
+
+	viper3.3 lamp.gtf LAMP 
+
+Try editing the file, saving it and rereading it.
+
+To Groundtruth LAMP from scratch, use
+
+	viper3.2 lamp-empty.cfg LAMP 
+
+************************************************************************
+
+If you have downloaded ViPER-Samples, you can edit the properties file
+in <VIPER_HOME>/CONFIG/ViPER-Samples to change the following lines:
+
+#
+#
+#   Directory Paths
+#
+
+dataDir=/fs/orion4/LAMP/ViPER-Samples/DATA/JPEG/
+configDir=/fs/orion4/LAMP/ViPER-Samples/GTF/
+dumpDir=../dump
+
+to reflect the location of your the samples then run
+
+	source ViPER-Samples.config
+	viper3.3 <GTFFILE> <SERIESDIR>
+
+and the data will be extracted from the ViPER-Samples directory
+

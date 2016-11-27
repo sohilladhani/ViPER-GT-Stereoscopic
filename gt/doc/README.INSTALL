@@ -1,0 +1,18 @@
+ * ************************************************************************ *
+       Copyright (C) 2000 by the University of Maryland, College Park
+
+		Laboratory for Language and Media Processing
+		   Institute for Advanced Computer Studies
+	       University of Maryland, College Park, MD  20742
+
+   email: lamp@cfar.umd.edu               http: lamp.cfar.umd.edu
+ * ************************************************************************ *
+
+
+This version of the interface software requires 
+	jdk1.2beta4
+	swing-1.0.2
+
+To prepare data, the system requires
+	mpeg_play - to extract ppm files from mpeg sequences if necessary
+	convert (ImageMagick) - to convert ppm files to jpeg files 	

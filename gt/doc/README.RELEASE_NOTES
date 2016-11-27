@@ -1,0 +1,172 @@
+ * ************************************************************************ *
+       Copyright (C) 2000 by the University of Maryland, College Park
+
+		Laboratory for Language and Media Processing
+		   Institute for Advanced Computer Studies
+	       University of Maryland, College Park, MD  20742
+
+   email: lamp@cfar.umd.edu               http: lamp.cfar.umd.edu
+ * ************************************************************************ *
+
+version 3.5 
+-- cursor on the image panel was changed to be a cross hair instead of a regular arrow.
+-- SNiPER (the magnifier window) was added.
+-- JAI was added into the lib directory to run SNiPER.
+-- two bugs in the mpegplay package were fixed.  Before they were fixed, the bugs made the program freeze when using it with mpeg files.
+-- functional Save and Save As options were added under File menu.
+-- functional Load GTF and Load Data options were added under File menu.
+-- File chooser used for saving GTF's was upgraded from awt.FileDialog to swing.JFileChoser.
+-- The format of the command line to start ViPER was changed.  Now the best way to start ViPER is to pass absolute paths of both data (.info or .mpeg file) and GTF.
+-- Save file confirmation dialog was added.  It pops up on attempt to exit ViPER or load another GTF. 
+-- Content panel was moved from the top right of the GUI to one of the tabs in the buttom right.
+
+
+Version 3.3 - Bug Fixes
+
+Version 3.2 - March 9, 2000
+
+-- This is a public release.  Please send bugs to viper-bugs@cfar.umd.edu
+
+Version 3.1 - November 21st 1999
+
+-- Bug Fixes
+-- Moved to Vector representation to access larger sets of data
+
+
+Version 3.0c - August 31st 1999
+
+-- Added support for reading multiline attributes (printing is still done
+	on a single line.
+-- Fixed default bugs
+-- System requires quotes around all attributes.
+-- Default write is .gtf instead of .cfg
+-- 
+
+Version 3.0 - July 1st 1999
+
+-- Added support to Utilities Menu
+	Now Able to Change Box Color and Selected Box Color
+	From the Utilities Menu
+
+
+Version 3.0 - June 22nd 1999
+
+- Added support for other colors and double width lines
+
+- Added support for MPEG files 
+	New Info File Format: (old format still works-assumes JPEGS)
+		#VIPER_VERSION_3.0
+		N     [0 = JPEGs, 1 = List of Files, 2 = MPEG file]
+		Frame_Range [e.g 1 100,  iff N = 0]
+		List of Filenames [iff N = 1]
+
+- Added "tabs" between columns (^N)
+
+**************************************************************************
+
+Version 2.0i/j - June 2, 1999
+
+- Added Environment variables for java, swing and properties configuration
+
+Version 2.0h - April 26, 1999
+
+- Various Bug Fixes
+
+- Cntrl-T toggle of line and drawing modes
+
+- Add button to "set" start and end propogate range from current frame
+
+- Add shift-ctrl-f and -b for larger jumps (10) in frame navigation
+
+
+Version 2.0g - December 11, 1998
+
+- Configurable Keys with the file KEY_CONFIG.properties
+
+- Additional Online information
+
+Version 2.0f - October 28, 1998
+		
+- Single pixel/degree control with control-arrow for move and rotate
+
+Version 2.0e - October 16, 1998
+
+- 2x and 4x Zoom features
+
+- Ability to dump images of frames, ranges of frame or the whole sequence.
+
+- Creation of MPEG movies from dumped frames
+
+Version 2.0d - September 10, 1998
+ 
+- Added bboxes (just ul, h and w) and distinguished them from oboxes
+
+- Added persistence of selected elements over frame advances
+
+- Fixed bug which occurred when spatial attributes were static.
+
+- Fixed Menu over image redraw problem.
+
+- Fixed Printing error for contents.
+
+- Fixed Inconsistencies in Content Printing
+
+Version 2.0c - August 18, 1998
+
+- Add circle data type, recorded as center and radius
+ 
+- Forward and Reverse arrows activate single frame propogate when
+  propogate toggle is on.
+v
+- Fixed bug where fvalues where not being parsed correctly on input
+
+- Added backup on previous files when users saves data.  Intermediate results
+   are saved as filename.cfg.#x#.  x is the greatest value > 1 which has
+   not been used
+
+- Meta-hot keys are not used, instead of just a key.  For example
+  "meta-s" is now used for select.  Avoids conflicts with svalue type.
+
+- Only the most recent 30 frames of data are buffered.  This should avoid 
+   out of memory errors on large datasets.
+
+- Reading of NULL values 
+
+Notes:
+
+- bboxes and oboxes both have orientation, but bbox orientation is not
+	saved in the output file
+
+Known Bugs:
+	Null Pointer Exception with Combo Boxes
+		*Reward offered for fixing this bug! 
+
+	Drop down menus occluded
+
+	Can not use static option for bbox, obox, or circle
+
+	Problems if frames begin with 0
+
+
+	
+
+
+*********************************************************************
+Version 2.0b - August 10, 1998
+
+- Fixes image cache to allow unlimited numbers of frames
+
+- Adds scrolled panel to relieve congestion in object panels
+
+- Fixes rotation bug
+
+- Add hot keys for (S)elect, (M)ove, (E)dit, Rotate (O)rigin, Rotate
+(C)enter, (F)orward and (B)ackward
+
+- Various other enhancements
+
+
+*********************************************************************
+
+
+

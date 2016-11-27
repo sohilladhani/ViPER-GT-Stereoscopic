@@ -1,0 +1,23 @@
+ * ************************************************************************ *
+       Copyright (C) 2000 by the University of Maryland, College Park
+
+		Laboratory for Language and Media Processing
+		   Institute for Advanced Computer Studies
+	       University of Maryland, College Park, MD  20742
+
+   email: lamp@cfar.umd.edu               http: lamp.cfar.umd.edu
+ * ************************************************************************ *
+
+	Win98 installation README
+	ViPER 3.3
+	Date : 11/1/2000
+	
+1) Copy the whole directory of ViPER3.3 into your hard disk.
+
+2) Please install java jdk1.3. (You can get it from sun web site).
+
+3) Open viper33.bat in bin directory with your favorate editor, do following steps:
+	1. set VIPER_HOME to the directory you copied ViPER3.3, for example d:\ViPER3.3
+	2. Set JAVA_HOME to the direcotry you installed jdk1.3
+
+

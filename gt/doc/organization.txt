@@ -1,0 +1,70 @@
+VIPER
+
+BASE: edu.umd.cs.viper.gt
+
+.data: (Data Model)
+
+- Descriptor
+  > String       descriptorType (e.g., FILE, OBJECT, CONTENT, etc.)
+  > String       descriptorName (e.g., Person, Text, etc.)
+  > Attribute[]  attributeList
+
+- Attribute (abstract)
+  > String                     attributeName (e.g., SOURCEDIR, TORSO, COMMENT, etc.)
+  - DynamicAttribute
+    > boolean                  propagate
+    > boolean                  visible
+    > java.awt.Color           unselectedColor
+    > java.awt.Color           selectedColor
+    > DynamicAttributeValue[]  attributeValueList
+  - StaticAttribute
+    > DataType                 attributeValue
+
+- DynamicAttributeValue
+  > boolean  selected
+  > boolean  valid
+  > DataType value
+
+- DataType (abstract)
+  - BBox
+    > java.awt.Point      upperLeft
+    > java.awt.Dimension  size
+    > double              orientation
+  - BValue
+    > boolean             value
+  - Circle
+    > java.awt.Point      center
+    > int                 radius
+  - DValue
+    > ?
+  - FValue
+    > ?
+  - LValue
+    > DataType[]          list  (possible values)
+    > DataType            value (current value)
+  - OBox
+    > ?
+  - Oval
+    > java.awt.Point      upperLeft
+    > java.awt.Dimension  size
+  - Point
+    > java.awt.Point      value
+  - Polygon
+    > java.awt.Point[]    pointList
+    > boolean             open      (connect the first and last points?)
+  - SValue
+    > String              value
+
+
+.event: (Event Handlers)
+
+- ViperEvent (abstract)
+  - FrameSeekEvent
+  - SelectionEvent
+
+
+.gui: (GUI Components)
+
+
+.media: (Media Sequence I/O and Frame Access)
+

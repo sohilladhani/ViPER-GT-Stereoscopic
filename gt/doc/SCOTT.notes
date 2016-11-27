@@ -1,0 +1,293 @@
+Notes from lamp.java  (Charles Lin)
+--------------------
+
+GTCParser reads in a GTC file, which if I recall is a file that
+only contains information about each descriptor.   A descriptor
+is similar to a class in C++ or structure in C.   For example, here's
+a class in C.
+
+class foo
+{
+   int      height;  // field 
+   float    weight;  // field
+   Location pt;      // field
+}
+
+   This class contains 3 fields, which hold data: height, weight, and
+pt.  pt is an "object" in C++.
+
+   In Viper, instead of calling it a "structure" or "class", it is
+called a descriptor.   Instead of calling it a "field", in Viper, it
+is called an attribute.
+
+    C++                  Viper
+    ---                  -----
+    class                descriptor
+    field (data member)  attribute
+
+The goal of the GTCParser is to fill in two arrays (see GTCParser.java)
+by parsing a GTCParser.
+
+    * descTypeList (contains DescType)
+    
+   One of the two arrays, descTypeList, is filled in without parsing
+the file.   The array currently contains 4 descriptor types.  Each
+descriptor comes in one of 4 varieties:
+   
+    1) FILE
+    2) CONTENT
+    3) OBJECT
+    4) RELATION
+
+  I'm not sure that relation is currently being used.  There's
+not a direct analogy to descriptor types in C++.   The closest thing
+might be: struct, and union, which are 2 different ways to store
+aggregate information.   Descriptor types are different from the
+descriptr names.   A descriptor name is just like the class name
+in C++ (hence, when you declare "class Foo" Foo is the class name).
+
+  The second array, descriptorList, contains all the information from
+parsing a GTC file, and is more important.   The descriptorList
+is an array whose size is the same as descTypeList.   Currently,
+
+   descriptorList[ 0 ]  holds FILE descriptors
+   descriptorList[ 1 ]  holds CONTENT descriptors
+   descriptorList[ 2 ]  holds OBJECT descriptors
+   descriptorList[ 3 ]  holds RELATION descriptors
+
+   In parsing the descriptor file, GTC parser does the following
+
+   1. Determines what the descriptor type is (i.e., FILE, CONTENT, 
+      OBJECT, RELATION)
+   2. Determines the name of the descriptor
+   3. Determines what each of the attributes are (including
+        attribute name, and attribute type)
+   4. Stores the information about a descriptor (and its attributes)
+      in a class called Descriptor
+   5. Places the descriptor in the appropriate vector of 
+      descriptorList (recall each element of descriptorList contains
+      a Vector, and the Vector each contains a list of descriptors
+      of that type).
+
+   It does this for each of the descriptors in the file.
+
+   For example, suppose you are currently processing a CONTENT
+descriptor.   You discover the name of the vector is called
+Motion, and that it has some attributes.  This information is
+placed in a new instance of Descriptor.   This instance is
+then placed into descriptorList[ 1 ], which holds all descriptors
+with Content Type.
+
+   Once the parsing is done, the descriptor list contains 
+all the descriptor information from the file, and each is stored
+in the array element corresponding to the descriptor type.
+
+   The GTFParser and the GTCDataParser actually parse the same
+GTF file.   It assumes the beginning of the GTF file contains
+the descriptor information, and the rest of the file (starting
+at #START_DATA) contains any data previously stored.   The attributes
+are stored in a class called AttributeElt.  Actually, AttributeElt
+is an abstract class, which has a bunch of derived class for each
+attribute type.
+
+   * BboxAttr   (holds bounding box)
+   * BvalueAttr (holds boolean values)
+   * CircleAttr (circles)
+   * DvalueAttr (integers)
+   * FvalueAttr (floats)
+   * LvalueAttr (lists)
+   * OboxAttr   (oriented box)
+   * OvalAttr   (ovals)
+   * PointAttr  (points)
+   * SvalueAttr (strings)
+
+  Each of these attributes has a default value, but it's not currently
+being used (at least, not entirely....)
+
+  At this point, the information about each descriptor and its
+attributes have been read from the file, and are now stored.
+This information will be used to construct the data structures
+to hold the data.
+
+LargeFrame
+----------
+   LargeFrame contains all the data that will be used for the
+Viper (but no GUI elements).   In particular, it contains
+
+    Vector [] bigFrameList
+
+   bigFrameList is an array of Vectors, each containing BigFrame's.
+A BigFrame is another abstract base class, and from it is derived
+
+   * BigContentFrame
+   * BigFileFrame
+   * BigObjectFrame
+
+   There's still no BigRelationFrame.   Notice there is a BigXXXFrame
+for each descriptor type.   bigFrameList is filled out simply by
+going through the descriptorGroup array (used to be called
+descriptorList back in the GTFParser).  Hence, if the descriptorGroup
+(i.e., descriptorList) contains 4 elements (one for each descriptor
+type), then bigFrameList will also contain 4 elements, one for
+each descriptor type (in the same order as listed from the
+descTypeList).
+
+  So,
+    bigFrameList[ 0 ]  === vector of BigFileFrame objects
+    bigFrameList[ 1 ]  === vector of BigContentFrame objects
+    bigFrameList[ 2 ]  === vector of BigObjectFrame objects
+    bigFrameList[ 3 ]  === not being used yet
+
+  The constructor iterates over the descriptorGroup to construct
+BigFrame and place it in the correct vector.
+
+  Each BigFrame contains a FrameManager.  This manages each
+of the attributes (it will eventually create an array for each
+of the attributes).  This is where things get a little complicated.
+There are static and dynamic versions for each attribute type.
+Static versions (if I recall) are used for Content descriptors and
+File descriptors, while dynamic versions are used for Object
+descriptors.   I'll need to recall what the difference is.
+
+   FrameManager contains functions to create something called
+a FrameAttr.
+
+   FrameAttr: the data structure used to hold an attribute.
+
+   The FrameManager works this way.  First, for each type of data,
+you add a handler.   Each data type (such as Bbox, Dvalue, etc)
+has both a static and a dynamic handler.   The FrameManager stores
+the handlers.   The handlers are used to generate the FrameAttr (which
+holds the array).
+
+   Hence, there are two parts to FrameManager.
+
+   Initialization: call addHandler which are classes that will help you
+     to construct FrameAttr
+
+   Creation of FrameAttr:  Depending on whether the FrameAttr is static
+    (i.e., CONTENT and possibly FILE) or dynamic (i.e., OBJECT), this will
+    cause createStaticFrameAttr and createDynamicFrameAttr to be called.
+
+   Example:  Suppose you want to create a static DvalueFrameAttr.  (After
+     the handlers have been added) You call the FrameManager with attrElt 
+     set to an instance of DvalueAttr   Recall that DvalueAttr was created
+     in the first phase (the parsing of the GTF file).   Given DvalueAttr
+     the goal is to create DvalueStaticFrameAttr or DvalueDynamicFrameAttr
+     depending on which is called for.   If it was static, you would
+     want to create DvalueStaticFrameAttr.
+
+        From GTF file            Actual data structure to hold data
+        -------------            ----------------------------------
+         DvalueAttr               DvalueStaticFrameAttr/DvalueDynamicFrameAttr
+         SvalueAttr               SvalueStaticFrameAttr/SvalueDynamicFrameAttr
+         BboxAttr                 BboxStaticFrameAttr/BboxDynamicFrameAttr
+
+   Recall that DvalueAttr just held some information about a particular
+  dvalue attribute from the GTF file.   It does not hold any data from
+  the actual frames, which is really held in the FrameAttr version of
+  Dvalue.
+
+Back to BigFrame
+----------------
+   Recall that BigFrame is an abstract class designed to hold information
+about a single descriptor.   There are four kinds of big frames
+
+   BigFileFrame     -- for file descriptors
+   BigContentFrame  -- for content descriptors
+   BigObjectFrame   -- for object descriptors
+   BigRelationFrame -- for relation descriptors (doesn't exist)
+
+  The most important of these are the BigContentFrame and the BigObjectFrame.
+
+  Let's start with the simpler one of the two: BigContentFrame.
+
+  The goal of BigContentFrame is to take a descriptor (which holds a descriptor
+that is Content Type) and a frameManager and generate a FrameDescriptor
+
+   Input:  Descriptor, FrameManager
+   Output: FrameDescriptor
+
+   Recall that a Descriptor contains a bunch of AttributeElt's.   The
+goal is to use FrameManager and go through each attributeElt and generate
+a corresponding frameAttr.   For example
+
+      +----------+                         +---------------------+
+      |Descriptor|			   |   FrameDescriptor   |
+      +----------+			   +---------------------+
+      |DvalueAttr|   through FrameManager  |DvalueStaticFrameAttr|
+      |SvalueAttr|         =======>	   |SvalueStaticFrameAttr|
+      |BboxAttr  |			   |BboxStaticFrameAttr  |
+      +----------+			   +---------------------+
+
+   Actually, this transformation is made by calling the constructor
+to FrameDescriptor.   This will generate the FrameDescriptor, but just
+barely.   When the setNumFrames method is called on FrameDescriptor, that's
+when all the FrameAttr's are actually created.
+
+   Let's look at all the data members of the FrameDescriptor.
+     descriptor -- the original descriptor from which FrameDescriptor was made
+     attrList   -- a list of frame attributes, generated from the frame manager
+     exists     -- an array with as many elements as actual frames
+                   of the video clip.   true, if the descriptor exists in that
+                   frame.
+     numFrames  -- total number of frames
+     numAttributes -- number of attributes 
+
+     manager -- the FrameManager
+
+   When setNumFrames is called, attrList is generated using the FrameManager
+and the Descriptor.
+
+   In effect, BigContentFrame is a wrapper around FrameDescriptor.  
+FrameDescriptor actually holds all the data (all the FrameAttr).  The
+reason for this was to make BigContentFrame and BigFileFrame look more
+alike.  Both would contain FrameDescriptors which would hold the similar
+data.
+
+BigObjectFrame
+--------------
+   BigObjectFrame is more complicated.   If you need a visual example
+of "objects" as applied to Viper, think of a face tracking video.  You
+have several people at a meeting.  Let's say it's Joe, Fred, and Mary.
+At each frame, there is a bounding box surrounding the head of Joe, Fred,
+and Mary.  If Mary steps out of the frame, there will be no bounding box
+on those frames.   When she comes back in, her bounding box returns.
+
+   Why is this problematic?   Initially, before we thought about objects,
+the application would be something like this: suppose there were two
+camera motions: panning left and panning right.   You could classify each
+frame (or consecutive frames) based on whether it was panning left or
+panning right (or if it wasn't panning, you could set the exist button
+to false).   Hence, once someone analyzed video data (through a program)
+they could check for the number of consecutive pan-lefts.   The result
+might be frames 10-20 (pan left), frames 50-90 (pan right), frames (120-130)
+(pan right).   In other words, you just look for consecutive pan-lefts or
+consecutive pan-rights.
+
+   The problem with bounding boxes is that it moves.   So, without doing
+sophisticated automated tracking, it might be hard to tell a bounding box 
+belonged to Mary.   It's easier to have a person record the fact that it
+is Mary.   So, we create an object called Mary, and have the bounding box
+move to track her.   In certain frames, she may step out of camera range,
+and then step back in.    This is a more complicated situtation than
+tracking pan-left and pan-right.
+
+   Still, I wanted to use FrameDescriptors to store this information,
+so this is how I did it.
+
+   BigObjectFrame contains a FrameDescriptorTable.   A FrameDescriptorTable
+is essentially a vector of FrameDescriptors.   Each instance of an object
+is described by a FrameDescriptor, which is stored in a FrameDescriptorTable.
+You can think of a FrameDescriptorTable as an array (although it is a
+Vector).   Each instance has an ID number, and the ID number happens
+to be the index into the array (or Vector).   In hindsight, having the
+ID be the index was not the best idea as it potentially wastes space.
+(You could have object IDs of 1 and 100, and the Vector would have to
+be 100 elements long, because of the index 100--it should only be two
+elements long).
+
+   Because there can be "gaps" in the FrameDescriptorTable (for example,
+the FrameDescriptor at index 1 and 100 could be valid, but all the
+indices between 2 and 99 do not contain valid descriptors).
+    

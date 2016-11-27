@@ -1,0 +1,29 @@
+Small notes on the input series.
+-------------------------------
+
+There are three different methods of video input.  As an mpeg-1 file, as a numbered
+series of jpg files or a listed series of jpg and ppm files.
+
+ViPER distinguishes between the three different forms of input though the
+.info file in the specified directory containing the series.  This directory
+is one of the command line parameters (the second).
+
+In the .info file, the second line after the comment denotes what type of input
+should be used.  A number is expected on this line with the following correspondence:
+
+	0	A series of jpg files.  These files need to be ordered with the last 5
+		characters before the filename extension corresponding to the frame
+		number.  ie - LAMP_00051.jpg is the 51st frame.
+
+	1	A series of jpg and ppm files ordered as a list of filenames.  The
+		ordered list will follow in the .info file.
+
+	2	An mpeg 1 file with the filename of the series name followed by the
+		.mpg extension.
+
+Another means of using an mpeg file as input is to write the name of the mpeg file
+as the second command line parameter.  This parameter can be either an absolute or
+a relative path name to the mpeg file.
+
+To create a series of numbered JPEGs, a utility is provided in the bin directory...
+(as was written in the documentation as before).
